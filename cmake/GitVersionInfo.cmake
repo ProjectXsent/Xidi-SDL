@@ -2,11 +2,15 @@
 set(XIDI_GENERATED_DIR "${CMAKE_BINARY_DIR}/generated" CACHE INTERNAL "")
 file(MAKE_DIRECTORY "${XIDI_GENERATED_DIR}")
 
+# Optional override, e.g. -DXIDI_VERSION=1.2.3 (empty = derive from Git tags)
+set(XIDI_VERSION "" CACHE STRING "Override the version number (major.minor.patch); empty = use Git")
+
 add_custom_target(xidi_git_version
   COMMAND ${CMAKE_COMMAND}
           -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
           -DOUTPUT_FILE=${XIDI_GENERATED_DIR}/GitVersionInfo.generated.h
           -DEXTRA_ARG=$<$<CONFIG:Debug>:debug>
+          -DVERSION_OVERRIDE=${XIDI_VERSION}
           -P ${CMAKE_CURRENT_LIST_DIR}/GitVersionInfoGenerate.cmake
   BYPRODUCTS ${XIDI_GENERATED_DIR}/GitVersionInfo.generated.h
   COMMENT "Generating Git version information"
